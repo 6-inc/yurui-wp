@@ -32,27 +32,63 @@ $container   = get_theme_mod( 'understrap_container_type' );
             <main class="site-main" id="main">
 
                 <?php if ( have_posts() ) : ?>
+                    <div class="row">
+                        
+                    
+                        <?php /* Start the Loop */ ?>
 
-                    <?php /* Start the Loop */ ?>
+                        <?php while ( have_posts() ) : the_post(); ?>
 
-                    <?php while ( have_posts() ) : the_post(); ?>
+                            <article <?php post_class(array( 'col-md-4' )); ?> id="post-<?php the_ID(); ?>">
 
-                        <?php
+                                <header class="entry-header">
 
-                        /*
-                         * Include the Post-Format-specific template for the content.
-                         * If you want to override this in a child theme, then include a file
-                         * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-                         */
-                        get_template_part( 'loop-templates/content', get_post_format() );
-                        ?>
+                                    <?php the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ),
+                                    '</a></h2>' ); ?>
 
-                    <?php endwhile; ?>
+                                    <?php if ( 'post' == get_post_type() ) : ?>
 
-                <?php else : ?>
+                                        <div class="entry-meta">
+                                            <?php understrap_posted_on(); ?>
+                                        </div><!-- .entry-meta -->
 
-                    <?php get_template_part( 'loop-templates/content', 'none' ); ?>
+                                    <?php endif; ?>
 
+                                </header><!-- .entry-header -->
+
+                                <?php echo get_the_post_thumbnail( $post->ID, 'large' ); ?>
+
+                                <div class="entry-content">
+
+                                    <?php
+                                    the_excerpt();
+                                    ?>
+
+                                    <?php
+                                    wp_link_pages( array(
+                                        'before' => '<div class="page-links">' . __( 'Pages:', 'understrap' ),
+                                        'after'  => '</div>',
+                                    ) );
+                                    ?>
+
+                                </div><!-- .entry-content -->
+
+                                <footer class="entry-footer">
+
+                                    <?php understrap_entry_footer(); ?>
+
+                                </footer><!-- .entry-footer -->
+
+                            </article><!-- #post-## -->
+
+
+                        <?php endwhile; ?>
+
+                    <?php else : ?>
+
+                        <?php get_template_part( 'loop-templates/content', 'none' ); ?>
+                    
+                    </div>
                 <?php endif; ?>
 
             </main><!-- #main -->
