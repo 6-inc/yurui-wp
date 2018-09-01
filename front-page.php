@@ -26,6 +26,26 @@ $container   = get_theme_mod( 'understrap_container_type' );
 
         <div class="row">
 
+            <?php
+                $args = array(
+                    'category_name' => '未分類',
+                    'posts_per_page' => -1,
+                    );
+                $frontposts = new WP_Query( $args );
+                $count = 0;
+                if( $frontposts->have_posts() ): ?>
+                <h2>未分類の記事はこちら</h2>
+                <ul class="col-12">
+                    <?php while ( $frontposts->have_posts() ) : $frontposts->the_post(); ?>
+                        <li>
+                            <a href="<?php echo get_permalink(); ?>"><?php the_title(); ?></a>
+                        </li>
+                        <?php $count += 1; ?>
+                    <?php endwhile; ?>
+                </ul>
+                <?php endif;
+                wp_reset_postdata(); ?>
+
             <!-- Do the left sidebar check and opens the primary div -->
             <?php get_template_part( 'global-templates/left-sidebar-check' ); ?>
 
